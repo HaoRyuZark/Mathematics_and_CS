@@ -1,0 +1,90 @@
+DSA Hausaufgabe 1
+
+01: READ 1  | a = n
+02: LOAD *1 | acc = n
+03: JGTZ 6  | if acc > 0: enter continue else:  
+04: WRITE 0 | output = n
+05: GOTO 22 | End
+06: LOAD *1 | acc = n
+07: STORE 2 | x = n
+08: LOAD *1 | acc = n
+09: SUB 1   | acc = n - 1
+10: STORE 3 | b = n - 1
+11: LOAD *3 | acc = n - 1
+12: JGTZ 14 | loop as long b >= 0 
+13: GOTO 21 | output x and exit
+14: LOAD *2 | acc = n
+15: MULT *1 | acc = n * n
+16: STORE 2 | x = n * n
+17: LOAD *3 | acc = n - 1
+18. SUB 1   | acc = n - 1 - 1
+19: STORE 3 | b = n - 1 - 1
+20: GOTO 11 | loop
+21: WRITE 2 | output 2
+22: HALT    | End
+
+a) Das Programm berechnet n^n
+
+b) Invariante
+
+-> Zeile 11 [a * a ^ (a - b - 1)]
+-> Zeile 21 x = a ^ a
+
+Mit:
+
+    a = σ(1) → Eingabewert (ursprünglich n)
+
+    x = σ(2) → Zwischenspeicher für das aktuelle Produkt (Fakultät)
+
+    b = σ(3) → Zähler für die Schleife (n-1, n-2, ... 1)
+
+
+----Korrigierte Version für die Fakultät----
+
+01: READ 1   | Read input and store in Cell 1
+02: LOAD *1  | Load value in cell 1 to the accumulator
+03: JGTZ 6   | If acc > 0, go to factorial computation
+
+04: WRITE 1  | If acc <= 0, output 1 (since 0! = 1)
+05: GOTO 22  | Exit program
+
+06: LOAD *1  | Load input value (n)
+07: STORE 2  | Store it in cell 2 (factorial result, initially n)
+08: LOAD 1   | Load input again
+09: SUB 1    | Subtract 1 to get (n-1)
+10: STORE 3  | Store (n-1) in cell 3 (loop counter)
+
+11: LOAD *3  | Load loop counter
+12: JGTZ 14  | If > 0, continue looping
+13: GOTO 21  | Else, go to output result
+
+14: LOAD *2  | Load current factorial result
+15: MULT *3  | Multiply by loop counter
+16: STORE 2  | Store new factorial result in cell 2
+17: LOAD *3  | Load loop counter
+18: SUB 1    | Decrement loop counter
+19: STORE 3  | Save decremented counter in cell 3
+20: GOTO 11  | Repeat loop
+
+21: WRITE 2  | Output the computed factorial
+22: HALT     | End program
+
+----Python Code----
+
+a = input()
+
+if a <= 0:
+    print(1)  # Fix: Return 1 for 0!
+    return
+
+factorial = a
+counter = a - 1
+
+while counter > 0:
+    factorial *= counter
+    counter -= 1
+
+print(factorial)
+
+
+
